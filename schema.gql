@@ -1,0 +1,86 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Order {
+  id: String!
+  createdAt: String
+  updatedAt: String
+  customerId: String!
+  customer: User
+  findCustomer: User!
+}
+
+type User {
+  id: String!
+  email: String!
+  firstName: String!
+  lastName: String
+  phoneNumber: String!
+  address: String
+  createdAt: String
+  updatedAt: String
+  orders: [Order!]
+}
+
+type Auth {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Query {
+  users: [User!]!
+  user(id: String!): User!
+  auth(id: Int!): Auth!
+  orders: [Order!]!
+  order(id: String!): Order!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
+  createAuth(createAuthInput: CreateAuthInput!): Auth!
+  updateAuth(updateAuthInput: UpdateAuthInput!): Auth!
+  removeAuth(id: Int!): Auth!
+  createOrder(createOrderInput: CreateOrderInput!): Order!
+  updateOrder(updateOrderInput: UpdateOrderInput!): Order!
+  removeOrder(id: Int!): Order!
+}
+
+input CreateUserInput {
+  email: String!
+  firstName: String!
+  lastName: String
+  phoneNumber: String!
+  address: String
+}
+
+input UpdateUserInput {
+  email: String
+  firstName: String
+  lastName: String
+  phoneNumber: String
+  address: String
+  id: Int!
+}
+
+input CreateAuthInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateAuthInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateOrderInput {
+  customerId: String!
+}
+
+input UpdateOrderInput {
+  customerId: String
+  id: Int!
+}

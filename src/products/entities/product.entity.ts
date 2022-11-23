@@ -1,6 +1,6 @@
 import { Field } from "@nestjs/graphql";
-// import { Order } from "src/order/entities/order.entity";
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Order } from "src/orders/entities/order.entity";
+import { Column, CreateDateColumn, Entity, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Product {
@@ -8,12 +8,26 @@ export class Product {
   @Field()
   id: string
 
+  @Field()
   @Column()
   name: string
 
+  @Field()
   @Column({type:"numeric", precision:10, scale:2, })
   price: number
 
-  // @ManyToMany(()=> Order, order => order.products)
-  // orders: Order[]
+   //dates
+
+   @CreateDateColumn({ type: 'timestamptz', nullable: true })
+   @Field({ nullable: true })
+   createdAt: string;
+ 
+   @UpdateDateColumn({ type: 'timestamptz', nullable: true })
+   @Field({ nullable: true })
+   updatedAt: string;
+   
+   //relationships
+
+  @ManyToMany(()=> Order, order => order.products)
+  orders: Order[]
 }
