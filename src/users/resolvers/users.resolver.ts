@@ -13,16 +13,6 @@ export class UsersResolver {
     private readonly ordersService: OrdersService
   ) { }
 
-  @Query(() => [User], { name: 'users' })
-  findAll() {
-    return this.usersService.findAll();
-  }
-
-  @Query(() => User, { name: 'user' })
-  findOne(@Args('id', { type: () => String }) id: string) {
-    return this.usersService.findOne(id);
-  }
-
   @Mutation(() => User)
   createUser(@Args('createUserInput') createUserInput: CreateUserInput): Promise<User> {
     return this.usersService.create(createUserInput);
@@ -38,9 +28,20 @@ export class UsersResolver {
     return this.usersService.remove(id);
   }
 
+  @Query(() => [User], { name: 'users' })
+  findAll() {
+    return this.usersService.findAll();
+  }
+
+  @Query(() => User, { name: 'user' })
+  findOne(@Args('id', { type: () => String }) id: string) {
+    return this.usersService.findOne(id);
+  }
+
   @ResolveField(() => [Order])
   async orders(@Parent() user: User): Promise<Order[]> {
     if (user)
       return await this.ordersService.findOrdersByCustomerId(user.id);
   }
+
 }

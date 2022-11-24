@@ -8,16 +8,6 @@ import { OrdersService } from '../services/orders.service';
 export class OrdersResolver {
   constructor(private readonly ordersService: OrdersService) { }
 
-  @Query(() => [Order], { name: 'orders' })
-  findAll() {
-    return this.ordersService.findAll();
-  }
-
-  @Query(() => Order, { name: 'order' })
-  findOne(@Args('id', { type: () => String }) id: string) {
-    return this.ordersService.findOne(id);
-  }
-
   @Mutation(() => Order)
   createOrder(@Args('createOrderInput') createOrderInput: CreateOrderInput) {
     return this.ordersService.create(createOrderInput);
@@ -32,6 +22,17 @@ export class OrdersResolver {
   removeOrder(@Args('id', { type: () => Int }) id: number) {
     return this.ordersService.remove(id);
   }
+
+  @Query(() => [Order], { name: 'orders' })
+  findAll() {
+    return this.ordersService.findAll();
+  }
+
+  @Query(() => Order, { name: 'order' })
+  findOne(@Args('id', { type: () => String }) id: string) {
+    return this.ordersService.findOne(id);
+  }
+
 
   // @ResolveField(()=> User)
   // async customer(@Parent() order: Order ): Promise<User> {

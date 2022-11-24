@@ -21,6 +21,14 @@ type Order {
   customerId: String!
 }
 
+type Product {
+  id: String!
+  name: String!
+  price: Float!
+  createdAt: String
+  updatedAt: String
+}
+
 type Auth {
   """Example field (placeholder)"""
   exampleField: Int!
@@ -31,6 +39,8 @@ type Query {
   user(id: String!): User!
   orders: [Order!]!
   order(id: String!): Order!
+  products: [Product!]!
+  product(id: String!): Product!
   auth(id: Int!): Auth!
 }
 
@@ -41,6 +51,7 @@ type Mutation {
   createOrder(createOrderInput: CreateOrderInput!): Order!
   updateOrder(updateOrderInput: UpdateOrderInput!): Order!
   removeOrder(id: Int!): Order!
+  createProduct(CreateProductInput: CreateProductInput!): Product!
   createAuth(createAuthInput: CreateAuthInput!): Auth!
   updateAuth(updateAuthInput: UpdateAuthInput!): Auth!
   removeAuth(id: Int!): Auth!
@@ -70,6 +81,11 @@ input CreateOrderInput {
 input UpdateOrderInput {
   customerId: String
   id: Int!
+}
+
+input CreateProductInput {
+  name: String!
+  price: Float!
 }
 
 input CreateAuthInput {

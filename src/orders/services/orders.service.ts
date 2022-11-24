@@ -14,7 +14,7 @@ export class OrdersService {
   ) { }
 
   /**
-   * creates order based on type of param
+   * creates order based on type defined (param)
    * @param createOrderInput 
    * @returns new order object
    */
