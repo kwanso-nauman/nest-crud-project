@@ -1,13 +1,141 @@
 import { Module } from '@nestjs/common';
-import { UsersService } from './services/users.service';
-import { UsersResolver } from './resolvers/users.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
 import { OrdersModule } from 'src/orders/orders.module';
+import { User } from './entities/user.entity';
+import { UsersResolver } from './resolvers/users.resolver';
+import { UsersService } from './services/users.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User]), OrdersModule],
   providers: [UsersResolver, UsersService],
-  exports: [UsersService],
 })
-export class UsersModule {}
+export class UsersModule { }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

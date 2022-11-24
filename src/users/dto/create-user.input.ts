@@ -16,4 +16,5 @@ export class CreateUserInput {
 
   @Field({nullable:true})
   address?: string
+
 }

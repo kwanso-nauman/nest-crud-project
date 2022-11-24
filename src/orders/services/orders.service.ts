@@ -1,7 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/services/users.service';
+import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm';
 import { CreateOrderInput } from '../dto/create-order.input';
 import { UpdateOrderInput } from '../dto/update-order.input';
@@ -11,18 +9,17 @@ import { Order } from '../entities/order.entity';
 export class OrdersService {
 
   constructor(
-    @InjectRepository(Order) 
+    @InjectRepository(Order)
     private ordersRepository: Repository<Order>,
-    private usersService: UsersService
-  ) {}
-  
+  ) { }
+
   /**
    * creates order based on type of param
    * @param createOrderInput 
    * @returns new order object
    */
   async create(createOrderInput: CreateOrderInput): Promise<Order> {
-    try{
+    try {
       const newOrder = this.ordersRepository.create(createOrderInput);
       return this.ordersRepository.save(newOrder);
     } catch (err) {
@@ -33,9 +30,9 @@ export class OrdersService {
   /**
    * @returns all order objects
    */
-  async findAll() :Promise<Order[]> {
-    try{
-      return this.ordersRepository.find();
+  async findAll(): Promise<Order[]> {
+    try {
+      return await this.ordersRepository.find();
     } catch (err) {
       throw new InternalServerErrorException(err);
     }
@@ -46,26 +43,28 @@ export class OrdersService {
    * @param id 
    * @returns one order object
    */
-  async findOne(id: string): Promise<Order>{
-    try{
-      return this.ordersRepository.findOneOrFail({where: {id}});
+  async findOne(id: string): Promise<Order> {
+    try {
+      return await this.ordersRepository.findOneOrFail({ where: { id } });
     } catch (err) {
       throw new InternalServerErrorException(err);
     }
   }
 
+
   /**
-   * get customer that placed this order
-   * @param userId 
-   * @returns user object
-   */
-  async getCustomer(userId: string): Promise<User> {
-    try{
-      return this.usersService.findOne(userId);
-    } catch (err) {
-      throw new InternalServerErrorException(err);
-    }
+ * Finds orders by customer id
+ * @param id 
+ * @returns orders by customer id 
+ */
+  async findOrdersByCustomerId(id: string): Promise<Order[]> {
+    return await this.ordersRepository.find({
+      where: {
+        customerId: id
+      }
+    });
   }
+
   update(id: number, updateOrderInput: UpdateOrderInput) {
     return `This action updates a #${id} order`;
   }

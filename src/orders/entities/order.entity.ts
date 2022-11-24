@@ -26,8 +26,8 @@ export class Order{
   
   //relationships
 
-  @ManyToOne(()=> User, customer => customer.orders, {onDelete: 'CASCADE'})
-  @Field(()=> User, {nullable:true})
+  @ManyToOne(()=> User, customer => customer.orders)
+  // @Field(()=> User, {nullable:true})
   customer: User
 
   @ManyToMany(()=> Product, product => product.orders)

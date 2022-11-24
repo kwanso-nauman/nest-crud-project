@@ -41,7 +41,7 @@ export class User {
 
   //relationships
 
-  @OneToMany(()=> Order, order => order.customer)
+  @OneToMany(()=> Order, order => order.customer, {onDelete:'CASCADE'})
   @Field(() => [Order], {nullable:true})
   orders: Order[]
 }

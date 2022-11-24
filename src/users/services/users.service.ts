@@ -1,5 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { OrdersService } from 'src/orders/services/orders.service';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from '../dto/create-user.input';
 import { UpdateUserInput } from '../dto/update-user.input';
@@ -7,7 +8,12 @@ import { User } from '../entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private usersRepository:Repository<User>) {}
+
+  constructor(
+    @InjectRepository(User)
+    private usersRepository:Repository<User>,
+    private ordersService:OrdersService
+  ) {}
 
   /**
    * 
