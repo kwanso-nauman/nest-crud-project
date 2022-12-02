@@ -47,6 +47,4 @@ export class ProductsService {
       throw new InternalServerErrorException(err);
     }
   }
-
-
 }

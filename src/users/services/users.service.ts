@@ -1,6 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OrdersService } from 'src/orders/services/orders.service';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from '../dto/create-user.input';
 import { UpdateUserInput } from '../dto/update-user.input';
@@ -11,9 +10,8 @@ export class UsersService {
 
   constructor(
     @InjectRepository(User)
-    private usersRepository:Repository<User>,
-    private ordersService:OrdersService
-  ) {}
+    private usersRepository: Repository<User>,
+  ) { }
 
   /**
    * 
@@ -21,7 +19,7 @@ export class UsersService {
    * @returns 
    */
   async create(createUserInput: CreateUserInput): Promise<User> {
-    try{
+    try {
       const newUser = this.usersRepository.create(createUserInput);
       return this.usersRepository.save(newUser);
     } catch (err) {
@@ -33,7 +31,7 @@ export class UsersService {
    * 
    * @returns 
    */
-  async findAll() : Promise<User[]>{
+  async findAll(): Promise<User[]> {
     try {
       return this.usersRepository.find();
     } catch (err) {
@@ -46,9 +44,9 @@ export class UsersService {
    * @param id 
    * @returns 
    */
-  async findOne(id: string): Promise<User>{
-    try{
-      return this.usersRepository.findOneOrFail({where: {id}});
+  async findOne(id: string): Promise<User> {
+    try {
+      return this.usersRepository.findOneOrFail({ where: { id } });
     } catch (err) {
       throw new InternalServerErrorException(err);
     }

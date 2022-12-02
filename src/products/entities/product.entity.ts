@@ -1,6 +1,6 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Order } from "src/orders/entities/order.entity";
-import { Column, CreateDateColumn, Entity, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { OrderProduct } from "src/orders/entities/orderProduct.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 @ObjectType()
@@ -29,6 +29,7 @@ export class Product {
 
   //relationships
 
-  @ManyToMany(() => Order, order => order.products)
-  orders: Order[]
+  @OneToMany(() => OrderProduct, orderProduct => orderProduct.order, { onDelete: "CASCADE" })
+  @Field(() => [OrderProduct], { nullable: true })
+  orderProducts: OrderProduct[]
 }

@@ -1,15 +1,15 @@
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Field, ObjectType } from "@nestjs/graphql"
+import { Field, ObjectType } from "@nestjs/graphql";
 import { User } from "src/users/entities/user.entity";
-import { Product } from "src/products/entities/product.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { OrderProduct } from "./orderProduct.entity";
 
 @Entity()
 @ObjectType()
-export class Order{
+export class Order {
   @PrimaryGeneratedColumn('uuid')
   @Field()
   id: string
-  
+
   //dates
 
   @CreateDateColumn({ type: 'timestamptz', nullable: true })
@@ -21,16 +21,16 @@ export class Order{
   updatedAt: string;
 
   @Column()
-  @Field(()=>String)
+  @Field(() => String)
   customerId: string
-  
+
   //relationships
 
-  @ManyToOne(()=> User, customer => customer.orders)
+  @ManyToOne(() => User, customer => customer.orders)
   // @Field(()=> User, {nullable:true})
   customer: User
 
-  @ManyToMany(()=> Product, product => product.orders)
-  @JoinTable()
-  products: Product[]
+  @OneToMany(() => OrderProduct, orderProduct => orderProduct.product, { onDelete: "CASCADE" })
+  @Field(() => [OrderProduct], { nullable: true })
+  orderProduct: OrderProduct[]
 }

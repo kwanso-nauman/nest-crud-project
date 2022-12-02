@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import {Field, ObjectType} from "@nestjs/graphql"
+import { Field, ObjectType } from "@nestjs/graphql"
 import { Order } from "src/orders/entities/order.entity";
 
 @Entity()
@@ -13,20 +13,23 @@ export class User {
   @Column()
   email: string;
 
+  @Column()
+  password: string
+
   @Field()
   @Column()
   firstName: string;
 
-  @Field({nullable:true})
-  @Column({nullable:true})
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   lastName: string
 
   @Field()
   @Column()
   phoneNumber: string;
 
-  @Field({nullable:true})
-  @Column({nullable:true})
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   address: string;
 
   //dates
@@ -41,7 +44,7 @@ export class User {
 
   //relationships
 
-  @OneToMany(()=> Order, order => order.customer, {onDelete:'CASCADE'})
-  @Field(() => [Order], {nullable:true})
+  @OneToMany(() => Order, order => order.customer, { onDelete: 'CASCADE' })
+  @Field(() => [Order], { nullable: true })
   orders: Order[]
 }

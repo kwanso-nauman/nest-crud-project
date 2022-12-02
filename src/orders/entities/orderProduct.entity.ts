@@ -28,11 +28,11 @@ export class OrderProduct {
   updatedAt: string;
 
   // relations
-  @ManyToOne(() => Order, order => order.products)
+  @ManyToOne(() => Order, order => order.orderProduct)
   @Field(() => Order, { nullable: true })
   order: Order;
 
-  @ManyToOne(() => Product, product => product.orders, { onDelete: "CASCADE" })
+  @ManyToOne(() => Product, product => product.orderProducts, { onDelete: "CASCADE" })
   @Field(() => Product, { nullable: true })
   product: Product;
 
