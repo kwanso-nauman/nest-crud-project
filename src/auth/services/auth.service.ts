@@ -26,4 +26,18 @@ export class AuthService {
       user: result
     }
   }
+  /**
+ * Verify users service
+ * @param token 
+ * @returns  jwt object with roles
+ */
+  async verify(token: string) {
+    const secret = await this.jwtService.verify(token);
+    const user = await this.usersService.findOne(secret.sub);
+
+    return {
+      ...secret,
+      user: user
+    };
+  }
 }

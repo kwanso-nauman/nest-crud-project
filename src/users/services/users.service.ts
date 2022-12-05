@@ -1,8 +1,7 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { ForbiddenException, HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from '../dto/create-user.input';
-import { UpdateUserInput } from '../dto/update-user.input';
 import { User } from '../entities/user.entity';
 
 @Injectable()
@@ -20,6 +19,15 @@ export class UsersService {
    */
   async create(createUserInput: CreateUserInput): Promise<User> {
     try {
+      //duplicate email check
+      const existingUser = await this.usersRepository.findOneOrFail({ where: { email: createUserInput.email.trim().toLowerCase() } });
+      if (existingUser) {
+        throw new ForbiddenException({
+          status: HttpStatus.FORBIDDEN,
+          error: 'User already exists with this email',
+        });
+      }
+      //
       const newUser = this.usersRepository.create(createUserInput);
       return this.usersRepository.save(newUser);
     } catch (err) {
@@ -52,11 +60,12 @@ export class UsersService {
     }
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
-  }
+  // update(id: number, updateUserInput: UpdateUserInput) {
+  //   return `This action updates a #${id} user`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} user`;
+  // }
+
 }

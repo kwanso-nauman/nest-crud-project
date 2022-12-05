@@ -6,15 +6,18 @@ export class CreateUserInput {
   email: string
 
   @Field()
+  password: string
+
+  @Field()
   firstName: string
 
-  @Field({nullable:true})
+  @Field({ nullable: true })
   lastName?: string
 
   @Field()
   phoneNumber: string
 
-  @Field({nullable:true})
+  @Field({ nullable: true })
   address?: string
 
 }
