@@ -46,6 +46,11 @@ type LoginResponse {
   user: User!
 }
 
+type SignupResponse {
+  firstName: String!
+  email: String!
+}
+
 type Query {
   users: [User!]!
   user(id: String!): User!
@@ -62,6 +67,7 @@ type Mutation {
   removeOrder(id: Int!): Order!
   createProduct(CreateProductInput: CreateProductInput!): Product!
   login(loginUserInput: LoginUserInput!): LoginResponse!
+  signup(signupUserInput: SignupUserInput!): SignupResponse!
 }
 
 input CreateUserInput {
@@ -90,4 +96,11 @@ input CreateProductInput {
 input LoginUserInput {
   email: String!
   password: String!
+}
+
+input SignupUserInput {
+  email: String!
+  password: String!
+  firstName: String!
+  phoneNumber: String!
 }

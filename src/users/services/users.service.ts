@@ -1,4 +1,4 @@
-import { ForbiddenException, HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from '../dto/create-user.input';
@@ -19,15 +19,6 @@ export class UsersService {
    */
   async create(createUserInput: CreateUserInput): Promise<User> {
     try {
-      //duplicate email check
-      const existingUser = await this.usersRepository.findOneOrFail({ where: { email: createUserInput.email.trim().toLowerCase() } });
-      if (existingUser) {
-        throw new ForbiddenException({
-          status: HttpStatus.FORBIDDEN,
-          error: 'User already exists with this email',
-        });
-      }
-      //
       const newUser = this.usersRepository.create(createUserInput);
       return this.usersRepository.save(newUser);
     } catch (err) {
@@ -55,6 +46,19 @@ export class UsersService {
   async findOne(id: string): Promise<User> {
     try {
       return this.usersRepository.findOneOrFail({ where: { id } });
+    } catch (err) {
+      throw new InternalServerErrorException(err);
+    }
+  }
+
+  /**
+ * 
+ * @param id 
+ * @returns 
+ */
+  async findOneByEmail(email: string): Promise<User> {
+    try {
+      return this.usersRepository.findOne({ where: { email: email.trim().toLowerCase() } });
     } catch (err) {
       throw new InternalServerErrorException(err);
     }

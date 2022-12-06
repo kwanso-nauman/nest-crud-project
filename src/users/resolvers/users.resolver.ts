@@ -1,10 +1,11 @@
-import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
-import { UsersService } from '../services/users.service';
-import { User } from '../entities/user.entity';
-import { CreateUserInput } from '../dto/create-user.input';
-import { UpdateUserInput } from '../dto/update-user.input';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Order } from 'src/orders/entities/order.entity';
 import { OrdersService } from 'src/orders/services/orders.service';
+import { CreateUserInput } from '../dto/create-user.input';
+import { User } from '../entities/user.entity';
+import { UsersService } from '../services/users.service';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGraphQLGuard } from 'src/auth/jwt- auth.guard';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -14,6 +15,7 @@ export class UsersResolver {
   ) { }
 
   @Mutation(() => User)
+  @UseGuards(JwtAuthGraphQLGuard)
   createUser(@Args('createUserInput') createUserInput: CreateUserInput): Promise<User> {
     return this.usersService.create(createUserInput);
   }
@@ -29,11 +31,13 @@ export class UsersResolver {
   // }
 
   @Query(() => [User], { name: 'users' })
+  @UseGuards(JwtAuthGraphQLGuard)
   findAll() {
     return this.usersService.findAll();
   }
 
   @Query(() => User, { name: 'user' })
+  @UseGuards(JwtAuthGraphQLGuard)
   findOne(@Args('id', { type: () => String }) id: string) {
     return this.usersService.findOne(id);
   }
