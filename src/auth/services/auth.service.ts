@@ -1,9 +1,11 @@
 import { ForbiddenException, HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { UsersService } from 'src/users/services/users.service';
-import { LoginUserInput } from '../dto/login-user-input';
-import { JwtService } from '@nestjs/jwt'
-import { SignupUserInput } from '../dto/signup-user-input';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { User } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/services/users.service';
+import { LoginResponse } from '../dto/login-response';
+import { LoginUserInput } from '../dto/login-user-input';
+import { SignupUserInput } from '../dto/signup-user-input';
 
 @Injectable()
 export class AuthService {
@@ -13,19 +15,36 @@ export class AuthService {
   ) { }
 
   async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.usersService.findOne(email);
-    if (user && user.password === password) {
-      const { password, ...result } = user
-      return result;
+    try {
+      const user = await this.usersService.findOneByEmail(email);
+      const passwordMatch = await bcrypt.compare(password, user.password)
+      if (passwordMatch) {
+        if (user && passwordMatch) {
+          const { password, ...result } = user
+          return result;
+        }
+      }
+      return null;
+    } catch (err) {
+      throw new InternalServerErrorException(err);
     }
   }
 
   async login(loginUserInput: LoginUserInput) {
-    const user = await this.usersService.findOneByEmail(loginUserInput.email);
-    const { password, ...result } = user;
-    return {
-      access_token: this.jwtService.sign({ email: user.email, sub: user.id }),
-      user: result
+    try {
+      const validatedUser = await this.validateUser(loginUserInput.email, loginUserInput.password);
+      if (!validatedUser) {
+        throw new InternalServerErrorException({
+          message: "Incorrect Email or Password", status: 404, name: "Email or Password invalid",
+          access_token: null
+        })
+      }
+      return {
+        access_token: this.jwtService.sign({ email: validatedUser.email, sub: validatedUser.id }),
+        user: validatedUser
+      }
+    } catch (err) {
+      throw new InternalServerErrorException(err);
     }
   }
 

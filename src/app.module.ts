@@ -17,7 +17,6 @@ import { OrdersModule } from './orders/orders.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'schema.gql',
-      // context: {{req}} => {{req}},
       introspection: true,
       playground: true,
     }),
