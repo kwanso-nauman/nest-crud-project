@@ -1,10 +1,10 @@
 import { ForbiddenException, HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/services/users.service';
 import { LoginResponse } from '../dto/login-response';
 import { LoginUserInput } from '../dto/login-user-input';
+import { SignupResponse } from '../dto/signup-response';
 import { SignupUserInput } from '../dto/signup-user-input';
 
 @Injectable()
@@ -14,23 +14,12 @@ export class AuthService {
     private jwtService: JwtService
   ) { }
 
-  async validateUser(email: string, password: string): Promise<any> {
-    try {
-      const user = await this.usersService.findOneByEmail(email);
-      const passwordMatch = await bcrypt.compare(password, user.password)
-      if (passwordMatch) {
-        if (user && passwordMatch) {
-          const { password, ...result } = user
-          return result;
-        }
-      }
-      return null;
-    } catch (err) {
-      throw new InternalServerErrorException(err);
-    }
-  }
-
-  async login(loginUserInput: LoginUserInput) {
+  /**
+   * user login
+   * @param loginUserInput 
+   * @returns 
+   */
+  async login(loginUserInput: LoginUserInput): Promise<LoginResponse> {
     try {
       const validatedUser = await this.validateUser(loginUserInput.email, loginUserInput.password);
       if (!validatedUser) {
@@ -48,7 +37,12 @@ export class AuthService {
     }
   }
 
-  async signup(signupUserInput: SignupUserInput) {
+  /**
+   * user registration
+   * @param signupUserInput 
+   * @returns 
+   */
+  async signup(signupUserInput: SignupUserInput): Promise<SignupResponse> {
     try {
       //duplicate email check
       const existingUser = await this.usersService.findOneByEmail(signupUserInput.email);
@@ -69,15 +63,14 @@ export class AuthService {
     } catch (err) {
       throw new InternalServerErrorException(err);
     }
-
   }
 
   /**
-  * Verify users service
+  * helper function
   * @param token 
   * @returns  jwt object with roles
   */
-  async verify(token: string) {
+  async verify(token: string): Promise<any> {
 
     const secret = await this.jwtService.verify(token);
     const user = await this.usersService.findOne(secret.sub);
@@ -86,5 +79,23 @@ export class AuthService {
       ...secret,
       user: user
     };
+  }
+
+  /**
+  * helper function
+  * @param email 
+  * @param password 
+  * @returns 
+  */
+  async validateUser(email: string, password: string): Promise<any> {
+    const user = await this.usersService.findOneByEmail(email);
+    const passwordMatch = await bcrypt.compare(password, user.password)
+    if (passwordMatch) {
+      if (user && passwordMatch) {
+        const { password, ...result } = user
+        return result;
+      }
+    }
+    return null;
   }
 }

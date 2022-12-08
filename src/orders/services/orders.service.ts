@@ -1,8 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm'
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateOrderInput } from '../dto/create-order.input';
-import { UpdateOrderInput } from '../dto/update-order.input';
 import { Order } from '../entities/order.entity';
 
 @Injectable()
@@ -58,20 +57,24 @@ export class OrdersService {
  * @returns orders by customer id 
  */
   async findOrdersByCustomerId(id: string): Promise<Order[]> {
-    return await this.ordersRepository.find({
-      where: {
-        customerId: id
-      }
-    });
+    try {
+      return await this.ordersRepository.find({
+        where: {
+          customerId: id
+        }
+      });
+    } catch (err) {
+      throw new InternalServerErrorException(err);
+    }
   }
 
 
 
-  update(id: number, updateOrderInput: UpdateOrderInput) {
-    return `This action updates a #${id} order`;
-  }
+  // update(id: number, updateOrderInput: UpdateOrderInput) {
+  //   return `This action updates a #${id} order`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} order`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} order`;
+  // }
 }
