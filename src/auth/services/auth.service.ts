@@ -65,6 +65,8 @@ export class AuthService {
     }
   }
 
+  //fixed!!
+
   /**
   * helper function
   * @param token 
