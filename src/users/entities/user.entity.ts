@@ -32,6 +32,9 @@ export class User {
   @Column({ nullable: true })
   address: string;
 
+  @Column()
+  cnic: string
+
   //dates
 
   @CreateDateColumn({ type: 'timestamptz', nullable: true })
