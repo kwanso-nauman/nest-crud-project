@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3](https://github.com/kwanso-nauman/nest-crud-project/compare/v0.0.2...v0.0.3) (2022-12-09)
+
+
+### Bug Fixes
+
+* :bug: fixed auth bug ([e968888](https://github.com/kwanso-nauman/nest-crud-project/commit/e968888f77c1e649d7d67feea19ce9d64b8e5907))
+
 ### 0.0.2 (2022-12-09)
 
 
